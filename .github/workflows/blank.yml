@@ -1,11 +1,27 @@
-name: holaMundo.yaml
-on: [push]
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+# .github/workflows/validacion.yml
+name: Validación de HTML y CSS
 
-      - name: Run a script
-        run: echo "¡Hola, mundo!"
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    name: Validar HTML & CSS
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+      - name: Instalar validadores
+      run: |
+        npm install -g html-validator-cli css-validator
+    - name: Validar HTML
+      run: |
+        html-validator --file=./index.html --verbose
+    - name: Validar CSS
+      run: |
+        css-validator ./styles.css
